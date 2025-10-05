@@ -6,6 +6,9 @@ PY_PATH="/usr/local/bin/argonone-fan.py"
 CONF_PATH="/etc/argonone-fan.conf"
 UNIT_PATH="/etc/systemd/system/${SERVICE_NAME}"
 
+# Resolve repo-relative paths no matter where this script is run from
+SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+
 require_root() {
   if [ "$(id -u)" -ne 0 ]; then
     echo "Please run as root: sudo bash install-argonone-fan.sh"
@@ -29,17 +32,17 @@ write_conf() {
     return
   fi
   echo "[2/5] Installing default config to $CONF_PATH"
-  install -m 0644 config/argonone-fan.conf "$CONF_PATH"
+  install -D -m 0644 "${SCRIPT_DIR}/config/argonone-fan.conf" "$CONF_PATH"
 }
 
 write_script() {
   echo "[3/5] Installing control script to $PY_PATH"
-  install -m 0755 scripts/argonone-fan.py "$PY_PATH"
+  install -D -m 0755 "${SCRIPT_DIR}/scripts/argonone-fan.py" "$PY_PATH"
 }
 
 write_service() {
   echo "[4/5] Installing systemd unit $UNIT_PATH"
-  install -m 0644 systemd/argonone-fan.service "$UNIT_PATH"
+  install -D -m 0644 "${SCRIPT_DIR}/systemd/argonone-fan.service" "$UNIT_PATH"
 }
 
 enable_service() {
@@ -52,8 +55,8 @@ enable_service() {
   systemctl --no-pager --full status "$SERVICE_NAME" || true
   echo
   echo "✔ Installed."
-  echo "Config: $CONF_PATH"
-  echo "Script: $PY_PATH"
+  echo "Config:  $CONF_PATH"
+  echo "Script:  $PY_PATH"
   echo "Service: $SERVICE_NAME"
   echo
   echo "Edit thresholds in $CONF_PATH then:"

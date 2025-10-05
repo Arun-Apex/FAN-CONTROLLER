@@ -5,7 +5,7 @@ set -euo pipefail
 # Downloads this repo (branch/tag you specify), extracts it, and runs the installer.
 #
 # Usage:
-#   sudo bash bootstrap.sh                # uses default ref=main, installer=install-argonone-fan.sh
+#   sudo bash bootstrap.sh                # ref=main, installer=install-argonone-fan.sh
 #   sudo bash bootstrap.sh v1.0.0         # install from tag v1.0.0
 #   sudo bash bootstrap.sh main path/to/custom-installer.sh
 
@@ -43,7 +43,8 @@ echo "[3/4] Making installer executable ..."
 chmod +x "$INSTALLER"
 
 echo "[4/4] Running installer ..."
-bash "$INSTALLER"
+# cd into the extracted repo so relative paths inside the installer work
+cd "$SRC_DIR"
+bash "$INSTALLER_REL_PATH"
 
-echo "✔ Done."
-echo "Check service status with: sudo systemctl status argonone-fan.service"
+echo "✔ Done. Check service with: sudo systemctl status argonone-fan.service"
