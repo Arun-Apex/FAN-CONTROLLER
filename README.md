@@ -57,3 +57,6 @@ pwm_freq=50
 - Default pin for Argon One is **GPIO18 (BCM)**.
 - Requires `python3-rpi.gpio` and `libraspberrypi-bin` (installer will install via `apt`).
 
+- ONE Click Installation : curl -fsSL https://raw.githubusercontent.com/<OWNER>/<REPO>/main/install-argonone-fan.sh | sudo bash
+
+
